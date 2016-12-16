@@ -1,7 +1,8 @@
 {
     "require": {
         "silex/silex": "~2.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "symfony/yaml": "^3.2"
     },
     "autoload": {
         "psr-4": {"AcmeCorp\\Api\\": "app/"}
