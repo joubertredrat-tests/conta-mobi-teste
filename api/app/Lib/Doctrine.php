@@ -90,7 +90,6 @@ class Doctrine
     {
         $data = Yaml::parse(file_get_contents(CONFIG_PATH.'config.yml'));
         $config = new Configuration();
-
         if ($data['database']['debug'] == 'true') {
             $config->setSQLLogger(new EchoSQLLogger());
         }
@@ -100,12 +99,12 @@ class Doctrine
             'port' => $data['database']['port'],
             'user' => $data['database']['user'],
             'password' => $data['database']['password'],
+            'dbname' => $data['database']['name'],
             'persistent' => $data['database']['persistent'] == 'true',
             'host' => $data['database']['host'],
             'charset' => 'utf8',
             'driver' => 'pdo_mysql',
         ];
-
         $connection = DriverManager::getConnection($params, $config);
         $connection->setFetchMode(\PDO::FETCH_OBJ);
         return $connection;
