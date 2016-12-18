@@ -177,9 +177,11 @@ class Product
                 ->set('name', ':name')
                 ->set('price', ':price')
                 ->set('stock', ':stock')
+                ->where('id = :id')
                 ->setParameter(':name', $this->name, \PDO::PARAM_STR)
                 ->setParameter(':price', $this->price, \PDO::PARAM_STR)
                 ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
+                ->setParameter(':id', $this->id, \PDO::PARAM_INT)
                 ->execute()
             ;
             return true;
@@ -247,7 +249,6 @@ class Product
                 ->setMaxResults($limit[1])
             ;
         }
-
         $data = $query_builder->execute()->fetchAll();
 
         $return = [];

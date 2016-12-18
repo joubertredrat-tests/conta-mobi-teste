@@ -33,6 +33,7 @@ class Router
         );
 
         self::injectProductActions($app);
+        self::injectUserActions($app);
     }
 
     /**
@@ -69,6 +70,45 @@ class Router
             ->delete(
                 '/'.self::URI_PREFIX.'/products/{id}',
                 'AcmeCorp\Api\V1\Controller\Products::delete'
+            )
+            ->assert('id', '\d+')
+        ;
+    }
+
+    /**
+     * Injeta as rotas relacionados aos usuários
+     *
+     * @param Silex\Application $app
+     * @return void
+     */
+    private static function injectUserActions(Application &$app)
+    {
+        $app->get(
+            '/'.self::URI_PREFIX.'/users/',
+            'AcmeCorp\Api\V1\Controller\Users::displayAll'
+        );
+        $app
+            ->get(
+                '/'.self::URI_PREFIX.'/users/{id}',
+                'AcmeCorp\Api\V1\Controller\Users::display'
+            )
+            ->assert('id', '\d+')
+        ;
+        $app->post(
+            '/'.self::URI_PREFIX.'/users/',
+            'AcmeCorp\Api\V1\Controller\Users::insert'
+        );
+        $app
+            ->post(
+                '/'.self::URI_PREFIX.'/users/{id}',
+                'AcmeCorp\Api\V1\Controller\Users::update'
+            )
+            ->assert('id', '\d+')
+        ;
+        $app
+            ->delete(
+                '/'.self::URI_PREFIX.'/users/{id}',
+                'AcmeCorp\Api\V1\Controller\Users::delete'
             )
             ->assert('id', '\d+')
         ;
