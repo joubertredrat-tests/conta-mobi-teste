@@ -1,7 +1,7 @@
 <?php
 /**
  * Classe responsável pela manipulação
- * dos produtos no banco de dados
+ * dos usuários no banco de dados
  *
  * @author Joubert <eu@redrat.com.br>
  * @copyright Copyright (c) 2016, Acme Corporation
@@ -12,35 +12,42 @@ namespace AcmeCorp\Api\V1\Model;
 
 use AcmeCorp\Api\Lib\Doctrine;
 
-class Product
+class User
 {
     /**
-     * Identificador do produto
+     * Identificador do usuário
      *
      * @var int
      */
     private $id;
 
     /**
-     * Nome do produto
+     * Nome do usuário
      *
      * @var string
      */
     private $name;
 
     /**
-     * Preço do produto
+     * E-mail do usuário
      *
-     * @var float
+     * @var string
      */
-    private $price;
+    private $email;
 
     /**
-     * Estoque do produto
+     * Senha do usuário
      *
-     * @var int
+     * @var string
      */
-    private $stock;
+    private $password;
+
+    /**
+     * Delimitador de usuário como admin
+     *
+     * @var bool
+     */
+    private $admin;
 
     /**
      * Data de inclusão do registro
@@ -68,24 +75,25 @@ class Product
             $query_builder = Doctrine::getInstance()->createQueryBuilder();
             $query_builder
                 ->select('*')
-                ->from('products')
+                ->from('users')
                 ->where('id = :id')
                 ->setParameter(':id', $id, \PDO::PARAM_INT)
             ;
             $row = $query_builder->execute()->fetch();
             if (!$row) {
-                throw new \Exception('Registry '.$id.' not found on database');
+                throw new Exception('Registry '.$id.' not found on database');
             }
             $this->id = (int) $id;
             $this->name = (string) $row->name;
-            $this->price = (float) $row->price;
-            $this->stock = (int) $row->stock;
+            $this->email = (string) $row->email;
+            $this->password = (string) $row->password;
+            $this->admin = (bool) $row->admin;
             $this->date_insert = (string) $row->date_insert;
             $this->date_update = (string) $row->date_update;
         } elseif (is_null($id)) {
-            // Objeto vazio
+            $this->admin = false;
         } else {
-            throw new \Exception(
+            throw new Exception(
                 'Try to injection on class '.__CLASS__.' construct, '.
                     'variable $id received value '.$id.' from type '.gettype($id)
             );
@@ -104,12 +112,14 @@ class Product
     {
         switch ($attr) {
             case 'name':
-            case 'price':
-            case 'stock':
-                $this->$attr = trim($value);
+            case 'email':
+                $this->$attr = $value;
+                break;
+            case 'password':
+                $this->$attr = self::passwordHash($value);
                 break;
             default:
-                throw new \Exception('Unknown attribute: '.$attr);
+                throw new Exception('Unknown attribute: '.$attr);
                 break;
         }
     }
@@ -126,20 +136,43 @@ class Product
         switch ($attr) {
             case 'id':
             case 'name':
-            case 'price':
-            case 'stock':
+            case 'email':
+            case 'admin':
             case 'date_insert':
             case 'date_update':
                 return $this->$attr;
                 break;
+            case 'password':
+                return '*****';
+                break;
             default:
-                throw new \Exception('Unknown attribute: '.$attr);
+                throw new Exception('Unknown attribute: '.$attr);
                 break;
         }
     }
 
     /**
-     * Adiciona um novo produto
+     * Adiciona privilégio de admin ao usuário
+     *
+     * @return void
+     */
+    public function grantAdmin()
+    {
+        $this->admin = true;
+    }
+
+    /**
+     * Remove privilégio de admin do usuário
+     *
+     * @return void
+     */
+    public function revokeAdmin()
+    {
+        $this->admin = false;
+    }
+
+    /**
+     * Adiciona um novo usuário
      *
      * @return int|bool
      */
@@ -148,23 +181,25 @@ class Product
         if (!$this->id) {
             $query_builder = Doctrine::getInstance()->createQueryBuilder();
             $query_builder
-                ->insert('products')
+                ->insert('users')
                 ->setValue('name', ':name')
-                ->setValue('price', ':price')
-                ->setValue('stock', ':stock')
+                ->setValue('email', ':email')
+                ->setValue('password', ':password')
+                ->setValue('admin', ':admin')
                 ->setParameter(':name', $this->name, \PDO::PARAM_STR)
-                ->setParameter(':price', $this->price, \PDO::PARAM_STR)
-                ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
+                ->setParameter(':email', $this->email, \PDO::PARAM_STR)
+                ->setParameter(':password', $this->password, \PDO::PARAM_STR)
+                ->setParameter(':admin', $this->admin, \PDO::PARAM_BOOL)
                 ->execute()
             ;
-            $this->id = (int) $query_builder->getConnection()->lastInsertId();
+            $this->id = $query_builder->getConnection()->lastInsertId();
             return $this->id;
         }
         return false;
     }
 
     /**
-     * Atualiza um produto
+     * Atualiza o usuário
      *
      * @return boolean
      */
@@ -173,14 +208,16 @@ class Product
         if ($this->id) {
             $query_builder = Doctrine::getInstance()->createQueryBuilder();
             $query_builder
-                ->update('products')
+                ->update('users')
                 ->set('name', ':name')
-                ->set('price', ':price')
-                ->set('stock', ':stock')
+                ->set('email', ':email')
+                ->set('password', ':password')
+                ->set('admin', ':admin')
                 ->where('id = :id')
                 ->setParameter(':name', $this->name, \PDO::PARAM_STR)
-                ->setParameter(':price', $this->price, \PDO::PARAM_STR)
-                ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
+                ->setParameter(':email', $this->email, \PDO::PARAM_STR)
+                ->setParameter(':password', $this->password, \PDO::PARAM_STR)
+                ->setParameter(':admin', $this->admin, \PDO::PARAM_BOOL)
                 ->setParameter(':id', $this->id, \PDO::PARAM_INT)
                 ->execute()
             ;
@@ -190,7 +227,7 @@ class Product
     }
 
     /**
-     * Remove o produto
+     * Remove o usuário
      *
      * @return boolean
      */
@@ -199,7 +236,7 @@ class Product
         if ($this->id) {
             $query_builder = Doctrine::getInstance()->createQueryBuilder();
             $query_builder
-                ->delete('products')
+                ->delete('users')
                 ->where('id = :id')
                 ->setParameter(':id', $this->id, \PDO::PARAM_INT)
                 ->execute()
@@ -219,15 +256,16 @@ class Product
         return [
             'id' => (int) $this->id,
             'name' => (string) $this->name,
-            'price' => number_format($this->price, 2, '.', ''),
-            'stock' => (int) $this->stock,
+            'email' => (string) $this->email,
+            'password' => (string) '*****',
+            'admin' => (bool) $this->admin,
             'date_insert' => (string) $this->date_insert,
             'date_update' => (string) $this->date_update,
         ];
     }
 
     /**
-     * Requisita todos os produtos
+     * Requisita todos os usuários
      *
      * @param array $order
      * @param array $limit
@@ -238,7 +276,7 @@ class Product
         $query_builder = Doctrine::getInstance()->createQueryBuilder();
         $query_builder
             ->select('*')
-            ->from('products')
+            ->from('users')
         ;
         if ($order) {
             $query_builder->orderBy($order[0], $order[1]);
@@ -256,8 +294,9 @@ class Product
             $return[] = [
                 'id' => (int) $row->id,
                 'name' => (string) $row->name,
-                'price' => number_format($row->price, 2, '.', ''),
-                'stock' => (int) $row->stock,
+                'email' => (string) $row->email,
+                'password' => (string) '*****',
+                'admin' => (bool) $row->admin,
                 'date_insert' => (string) $row->date_insert,
                 'date_update' => (string) $row->date_update,
             ];
@@ -266,7 +305,7 @@ class Product
     }
 
     /**
-     * Requisita o total de produtos
+     * Requisita o total de usuários
      *
      * @return int
      */
@@ -275,10 +314,48 @@ class Product
         $query_builder = Doctrine::getInstance()->createQueryBuilder();
         $query_builder
             ->select('COUNT(*) as total')
-            ->from('products')
+            ->from('users')
         ;
         $row = $query_builder->execute()->fetchAll();
 
         return (int) $row[0]->total;
+    }
+
+    /**
+     * Verifica se um e-mail já existe
+     *
+     * @param string $email
+     * @param int $id
+     * @return bool
+     */
+    public function has($email, $id = null)
+    {
+        $query_builder = Doctrine::getInstance()->createQueryBuilder();
+        $query_builder
+            ->select('id')
+            ->from('users')
+            ->where('email = :email')
+            ->setParameter(':email', $email, \PDO::PARAM_STR)
+        ;
+        if ($id) {
+            $query_builder
+                ->andWhere(
+                    $query_builder->expr()->notIn('id', [$id])
+                )
+            ;
+        }
+
+        return $query_builder->execute()->rowCount() > 0;
+    }
+
+    /**
+     * Cria um hash de uma senha plana
+     *
+     * @param string $plain_password
+     * @return string
+     */
+    public static function passwordHash($plain_password)
+    {
+        return password_hash($plain_password, PASSWORD_DEFAULT);
     }
 }

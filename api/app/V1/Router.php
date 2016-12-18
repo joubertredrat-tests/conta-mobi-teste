@@ -34,6 +34,7 @@ class Router
 
         self::injectProductActions($app);
         self::injectUserActions($app);
+        self::injectLogsActions($app);
     }
 
     /**
@@ -112,5 +113,23 @@ class Router
             )
             ->assert('id', '\d+')
         ;
+    }
+
+    /**
+     * Injeta as rotas relacionados aos logs
+     *
+     * @param Silex\Application $app
+     * @return void
+     */
+    private static function injectLogsActions(Application &$app)
+    {
+        $app->get(
+            '/'.self::URI_PREFIX.'/logs/',
+            'AcmeCorp\Api\V1\Controller\Logs::displayAll'
+        );
+        $app->get(
+            '/'.self::URI_PREFIX.'/logs/types/',
+            'AcmeCorp\Api\V1\Controller\Logs::displayTypes'
+        );
     }
 }
