@@ -10,6 +10,7 @@
 
 namespace AcmeCorp\Api\V1;
 
+use Symfony\Component\HttpFoundation\Request;
 use Silex\Application;
 
 class Router
@@ -36,6 +37,12 @@ class Router
         self::injectProductActions($app);
         self::injectUserActions($app);
         self::injectLogsActions($app);
+
+        $app->get('/'.self::URI_PREFIX.'/docs/latest/', function (Application $app, Request $request) {
+            return $app->redirect(
+                $request->getSchemeAndHttpHost().$request->getBaseURL().'/docs/0.1/index.html'
+            );
+        });
     }
 
     /**
@@ -115,7 +122,7 @@ class Router
             'AcmeCorp\Api\V1\Controller\Users::insert'
         );
         $app
-            ->post(
+            ->patch(
                 '/'.self::URI_PREFIX.'/users/{id}',
                 'AcmeCorp\Api\V1\Controller\Users::update'
             )

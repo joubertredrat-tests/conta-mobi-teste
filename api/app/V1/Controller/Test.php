@@ -20,6 +20,18 @@ class Test extends ApiController
      * @param Silex\Application $app
      * @param Symfony\Component\HttpFoundation\Request $request
      * @return Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @apiName Ping
+     * @apiGroup Ping
+     * @apiVersion 0.1.0
+     * @api {get} /ping/ Teste de resposta da API
+     * @apiDescription Método de requisição para teste de resposta da API.
+     * @apiSuccess {String} message Resposta da API com o timestamp da resposta.
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *         "message": "Pong in 1482088230"
+     *     }
      */
     public function ping(Application $app, Request $request)
     {

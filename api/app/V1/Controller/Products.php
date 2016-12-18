@@ -22,6 +22,60 @@ class Products extends ApiController
      * @param Silex\Application $app
      * @param Symfony\Component\HttpFoundation\Request $request
      * @return Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @apiName ProductsList
+     * @apiGroup Products
+     * @apiVersion 0.1.0
+     * @api {get} /products/ Listagem de produtos
+     * @apiDescription Listagem de todos os produtos cadastrados no banco de dados.
+     * @apiHeader {String} X-Auth-Token Token para autenticação.
+     * @apiSuccess {Object[]} products Lista de produtos.
+     * @apiSuccess {Number} products.id Identificador do produto.
+     * @apiSuccess {String} products.name Nome do produto.
+     * @apiSuccess {String} products.price Preço do produto.
+     * @apiSuccess {Number} products.stock Total de itens do produto no estoque.
+     * @apiSuccess {String} products.date_insert Data de cadastro do produto.
+     * @apiSuccess {String} products.date_update Data da última atualização do produto.
+     * @apiHeaderExample {json} Exemplo de autenticação:
+     *     {
+     *         "X-Auth-Token": "52f86f8c-ba2b-4089-bf14-a0a1e69581e2"
+     *     }
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     [
+     *         {
+     *             "id": 1,
+     *             "name": "Caneta azul",
+     *             "price": "2.26",
+     *             "stock": 79,
+     *             "date_insert": "2016-12-17 18:40:57",
+     *             "date_update": "2016-12-18 17:27:39"
+     *         },
+     *         {
+     *             "id": 2,
+     *             "name": "Lapizeira",
+     *             "price": "15.30",
+     *             "stock": 6,
+     *             "date_insert": "2016-12-17 18:41:00",
+     *             "date_update": ""
+     *         },
+     *         {
+     *             "id": 3,
+     *             "name": "Lápis HB",
+     *             "price": "3.21",
+     *             "stock": 0,
+     *             "date_insert": "2016-12-17 18:41:01",
+     *             "date_update": "2016-12-18 17:28:19"
+     *         },
+     *         {
+     *             "id": 4,
+     *             "name": "Borracha",
+     *             "price": "0.59",
+     *             "stock": 122,
+     *             "date_insert": "2016-12-17 18:48:24",
+     *             "date_update": ""
+     *         }
+     *     ]
      */
     public function displayAll(Application $app, Request $request)
     {
@@ -49,6 +103,34 @@ class Products extends ApiController
      * @param Symfony\Component\HttpFoundation\Request $request
      * @param int $id
      * @return Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @apiName ProductsGet
+     * @apiGroup Products
+     * @apiVersion 0.1.0
+     * @api {get} /products/:product_id Exibição do produto
+     * @apiDescription Exibição de um produto cadastrado no banco de dados.
+     * @apiHeader {String} X-Auth-Token Token para autenticação.
+     * @apiParam {Number} product_id Identificador do produto.
+     * @apiSuccess {Number} products.id Identificador do produto.
+     * @apiSuccess {String} products.name Nome do produto.
+     * @apiSuccess {String} products.price Preço do produto.
+     * @apiSuccess {Number} products.stock Total de itens do produto no estoque.
+     * @apiSuccess {String} products.date_insert Data de cadastro do produto.
+     * @apiSuccess {String} products.date_update Data da última atualização do produto.
+     * @apiHeaderExample {json} Exemplo de autenticação:
+     *     {
+     *         "X-Auth-Token": "52f86f8c-ba2b-4089-bf14-a0a1e69581e2"
+     *     }
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *         "id": 1,
+     *         "name": "Caneta azul",
+     *         "price": "2.26",
+     *         "stock": 79,
+     *         "date_insert": "2016-12-17 18:40:57",
+     *         "date_update": "2016-12-18 17:27:39"
+     *     }
      */
     public function display(Application $app, Request $request, $id)
     {
@@ -76,6 +158,26 @@ class Products extends ApiController
      * @param Silex\Application $app
      * @param Symfony\Component\HttpFoundation\Request $request
      * @return Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @apiName ProductsInsert
+     * @apiGroup Products
+     * @apiVersion 0.1.0
+     * @api {post} /products/ Inclusão de produto
+     * @apiDescription Adiciona um produto ao banco de dados de acordo com os dados informados.
+     * @apiHeader {String} X-Auth-Token Token para autenticação.
+     * @apiParam {String} name Nome do produto.
+     * @apiParam {String} price Preço do produto.
+     * @apiParam {Number} stock Quantidade de itens do produto no estoque.
+     * @apiSuccess {String} message Mensagem de sucesso.
+     * @apiHeaderExample {json} Exemplo de autenticação:
+     *     {
+     *         "X-Auth-Token": "52f86f8c-ba2b-4089-bf14-a0a1e69581e2"
+     *     }
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 201 Created
+     *     {
+     *         "message": "Created, id 5"
+     *     }
      */
     public function insert(Application $app, Request $request)
     {
@@ -125,9 +227,8 @@ class Products extends ApiController
 
         Log::registerInsert($this->token->getUser(), 'Cadastro do produto '.$product->name);
 
-        $data['code'] = self::RESPONSE_SUCCESS_INSERT;
         $data['message'] = 'Created, id '.$id;
-        return $this->response($data);
+        return $this->response($data, self::RESPONSE_SUCCESS_INSERT);
     }
 
     /**
@@ -137,6 +238,27 @@ class Products extends ApiController
      * @param Symfony\Component\HttpFoundation\Request $request
      * @param int $id
      * @return Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @apiName ProductsUpdate
+     * @apiGroup Products
+     * @apiVersion 0.1.0
+     * @api {patch} /products/:product_id Alteração de produto
+     * @apiDescription Altera um produto no banco de dados de acordo com os dados informados.
+     * @apiHeader {String} X-Auth-Token Token para autenticação.
+     * @apiParam {Number} product_id Identificador do produto.
+     * @apiParam {String} [name] Nome do produto.
+     * @apiParam {String} [price] Preço do produto.
+     * @apiParam {Number} [stock] Quantidade de itens do produto no estoque.
+     * @apiSuccess {String} message Mensagem de sucesso.
+     * @apiHeaderExample {json} Exemplo de autenticação:
+     *     {
+     *         "X-Auth-Token": "52f86f8c-ba2b-4089-bf14-a0a1e69581e2"
+     *     }
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *         "message": "Updated"
+     *     }
      */
     public function update(Application $app, Request $request, $id)
     {
@@ -176,7 +298,6 @@ class Products extends ApiController
         $product->update();
 
         Log::registerUpdate($this->token->getUser(), 'Alteração do produto '.$product->name);
-
         $data['message'] = 'Updated';
         return $this->response($data);
     }
@@ -188,6 +309,24 @@ class Products extends ApiController
      * @param Symfony\Component\HttpFoundation\Request $request
      * @param int $id
      * @return Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @apiName ProductsDelete
+     * @apiGroup Products
+     * @apiVersion 0.1.0
+     * @api {delete} /products/:product_id Remoção de produto
+     * @apiDescription Remove um produto do banco de dados.
+     * @apiHeader {String} X-Auth-Token Token para autenticação.
+     * @apiParam {Number} product_id Identificador do produto.
+     * @apiSuccess {String} message Mensagem de sucesso.
+     * @apiHeaderExample {json} Exemplo de autenticação:
+     *     {
+     *         "X-Auth-Token": "52f86f8c-ba2b-4089-bf14-a0a1e69581e2"
+     *     }
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *         "message": "Deleted"
+     *     }
      */
     public function delete(Application $app, Request $request, $id)
     {
@@ -205,7 +344,7 @@ class Products extends ApiController
         $product = new Product($id);
         $product->delete();
 
-        Log::registerUpdate($this->token->getUser(), 'Exclusão do produto '.$product->name);
+        Log::registerDelete($this->token->getUser(), 'Exclusão do produto '.$product->name);
 
         $data['message'] = 'Deleted';
         return $this->response($data);

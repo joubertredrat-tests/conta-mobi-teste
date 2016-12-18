@@ -1,0 +1,40 @@
+{
+    "name": "Acme API",
+    "version": "0.1.0",
+    "description": "API para integração",
+    "title": "Acme API",
+    "url": "https://exemplo-dominio/api/v1",
+    "template": {
+        "forceLanguage": "pt_br",
+        "withCompare": true,
+        "withGenerator": false
+    },
+    "header": {
+      "title": "Index",
+      "filename": "apidoc_header.md"
+    },
+    "footer": {
+      "title": "Rodapé",
+      "filename": "apidoc_footer.md"
+    },
+    "order": [
+      "Ping",
+      "Auth",
+      "Products",
+      "ProductsList",
+      "ProductsGet",
+      "ProductsInsert",
+      "ProductsUpdate",
+      "ProductsDelete",
+      "Users",
+      "UsersList",
+      "UsersGet",
+      "UsersInsert",
+      "UsersUpdate",
+      "UsersDelete",
+      "Logs",
+      "LogsList",
+      "LogsTypes",
+      "All"
+    ]
+}

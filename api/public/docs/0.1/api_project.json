@@ -1,0 +1,48 @@
+{
+  "name": "Acme API",
+  "version": "0.1.0",
+  "description": "API para integração",
+  "title": "Acme API",
+  "url": "https://exemplo-dominio/api/v1",
+  "template": {
+    "forceLanguage": "pt_br",
+    "withCompare": true,
+    "withGenerator": false
+  },
+  "header": {
+    "title": "Index",
+    "content": "<p>Bem vindos a API da Acme Corp.\nEsta API tem o objetivo de facilitar a manutenção do estoque por meio de API REST.</p>\n<h3>Informações</h3>\n<h4>Requerimentos</h4>\n<p>Para utilização dos recursos desta API é necessário que o profissional que irá fazer a integração entre sistemas\ntenha conhecimento em programação de sistemas ou similares, bem como a linguagem ou interface para a integração\ntenha suporte a chamadas <a href=\"https://www.w3.org/Protocols/\">HTTP</a> e processamento de texto em formato <a href=\"http://www.json.org\">JSON</a>.</p>\n<h4>Requisição</h4>\n<p>As requisições aos métodos descritas nesta API obedecem ao padrão determinado pelo <a href=\"https://www.w3.org\">W3C</a> para requisições <a href=\"https://www.w3.org/Protocols/\">HTTP</a>,\nsendo os métodos de requisição suportados para uso nesta API os listados abaixo.</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:center\">Método</th>\n<th>Uso</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3\">GET</a></td>\n<td>Listagem e exibição de dados</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5\">POST</a></td>\n<td>Inclusão de novos registros</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://tools.ietf.org/html/rfc5789#section-2\">PATCH</a></td>\n<td>Alteração de registros existentes</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7\">DELETE</a></td>\n<td>Remoção ou desativação de registros</td>\n</tr>\n</tbody>\n</table>\n<p>Todas as chamadas disponíveis nesta API estão descritas ao decorrer desta documentação, porém, existe dois casos em que\npode ocorrer erros nas chamadas.</p>\n<ul>\n<li>Chamada inexistente: Caso seja realizada uma chamada em qualquer endereço diferente dos descritos nesta documentação,\nserá retornado uma resposta <a href=\"https://www.w3.org/Protocols/\">HTTP</a> de código <a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5\">404</a>\ne uma mensagem informada que a chamada não existe, como o exemplo abaixo.</li>\n</ul>\n<pre><code>{\n    &quot;code&quot;: 404,\n    &quot;message&quot;: &quot;Not found&quot;\n}\n</code></pre>\n<ul>\n<li>Chamada com método incorreto: A chamada está correta, porém, o método usado está incorreto, neste caso,\nserá retornado uma resposta <a href=\"https://www.w3.org/Protocols/\">HTTP</a> de código <a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6\">405</a>\ne uma mensagem informada que o método não foi aceito, como o exemplo abaixo.</li>\n</ul>\n<pre><code>{\n    &quot;code&quot;: 405,\n    &quot;message&quot;: &quot;Method Not Allowed&quot;\n}\n</code></pre>\n<h4>Resposta</h4>\n<p>A API da base utiliza os códigos de resposta <a href=\"https://www.w3.org/Protocols/\">HTTP</a> como padrão de resposta para o cliente, conforme pode ser conferido abaixo.</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:center\">Código</th>\n<th style=\"text-align:center\">Resposta</th>\n<th>Causas</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1\">200</a></td>\n<td style=\"text-align:center\">OK</td>\n<td>A requisição ocorreu com sucesso, ou seja, sem nenhum erro</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2\">201</a></td>\n<td style=\"text-align:center\">Created</td>\n<td>O registro foi criado com sucesso</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1\">400</a></td>\n<td style=\"text-align:center\">Bad Request</td>\n<td>O método foi requisitado incorretamente por falta de parâmetros obrigatórios</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2\">401</a></td>\n<td style=\"text-align:center\">Unauthorized</td>\n<td>Ocorreu uma falha no login pelo token não ter sido informado ou estar expirado</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4\">403</a></td>\n<td style=\"text-align:center\">Forbidden</td>\n<td>A API não permitiu alguma ação realizada na API, como alteração de dados por exemplo</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5\">404</a></td>\n<td style=\"text-align:center\">Not Found</td>\n<td>O método informado não existe ou nenhum dado foi retornado</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1\">500</a></td>\n<td style=\"text-align:center\">Internal Server Error</td>\n<td>Ocorreu algum erro durante o processamento da requisiçao</td>\n</tr>\n</tbody>\n</table>\n<p>Além códigos de resposta <a href=\"https://www.w3.org/Protocols/\">HTTP</a>, a API retorna o status da chamada com texto em formato <a href=\"http://www.json.org\">JSON</a>,\nformato padrão usado para API REST. Vale lembrar que esta API <strong>NÃO suporta retorno de chamadas em formato <a href=\"https://www.w3.org/XML/\">XML</a>.</strong></p>\n<p>Atenção na definição do endereço de URL para as chamadas, pois algumas chamadas termina com barra e outras não.</p>\n<p>Mais informações sobre o código de resposta <a href=\"https://www.w3.org/Protocols/\">HTTP</a> pode ser conferidas em\n<a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html\">https://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html</a> e\n<a href=\"https://en.wikipedia.org/wiki/List_of_HTTP_status_codes\">https://en.wikipedia.org/wiki/List_of_HTTP_status_codes</a>.</p>\n<p>Todas as datas requeridas nas consultas ou retornadas como dados deverão e estarão em formato ODBC canonical.</p>\n"
+  },
+  "footer": {
+    "title": "Rodapé",
+    "content": "<p>Copyright (c) Acme Corporation, Conta Mobi - A documentação desta API foi gerada usando o <a href=\"http://apidocjs.com\">APIDOC</a>.</p>\n"
+  },
+  "order": [
+    "Ping",
+    "Auth",
+    "Products",
+    "ProductsList",
+    "ProductsGet",
+    "ProductsInsert",
+    "ProductsUpdate",
+    "ProductsDelete",
+    "Users",
+    "UsersList",
+    "UsersGet",
+    "UsersInsert",
+    "UsersUpdate",
+    "UsersDelete",
+    "Logs",
+    "LogsList",
+    "LogsTypes",
+    "All"
+  ],
+  "sampleUrl": false,
+  "apidoc": "0.2.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2016-12-18T21:51:56.820Z",
+    "url": "http://apidocjs.com",
+    "version": "0.16.1"
+  }
+}

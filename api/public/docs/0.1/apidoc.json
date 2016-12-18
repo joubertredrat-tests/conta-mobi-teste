@@ -1,0 +1,22 @@
+{
+    "name": "Acme API",
+    "version": "0.1.0",
+    "description": "API para integração",
+    "title": "Acme API",
+    "url": "https://exemplo-dominio/vector/plugs/plugveiculos/api/v1",
+    "template": {
+        "forceLanguage": "pt_br",
+        "withCompare": true,
+        "withGenerator": false
+    },
+    "order": [
+      "Ping",
+      "Products",
+      "ProductsList",
+      "ProductsGet",
+      "ProductsInsert",
+      "ProductsUpdate",
+      "ProductsDelete",
+      "All"
+    ]
+}

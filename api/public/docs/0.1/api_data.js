@@ -1,0 +1,1122 @@
+define({ "api": [
+  {
+    "name": "Auth",
+    "group": "Auth",
+    "version": "0.1.0",
+    "type": "post",
+    "url": "/auth/",
+    "title": "Autenticação de usuário",
+    "description": "<p>Interface para autenticação do usuário na API. Este recurso é necessário para acessar as outras chamadas que solicitar autenticação. Ao fazer a operação com sucesso, é retornado um token, sendo este necessário para acessar os demais recursos da API que solicitar &quot;X-Auth-Token&quot; no header.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>E-mail do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Senha do usuário.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Users.php",
+    "groupTitle": "Auth"
+  },
+  {
+    "name": "LogsList",
+    "group": "Logs",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/logs/?user_id=:user_id&type=:type",
+    "title": "Listagem de logs",
+    "description": "<p>Listagem de todos os logs dos eventos realizados nesta API. Somente usuários com privilégio de admin ou o próprio usuário pode acessar este recurso.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "user_id",
+            "description": "<p>Identificador do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "type",
+            "description": "<p>Tipo de operação. Para ver os tipos disponíveis, consulte a próxima chamada.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "logs",
+            "description": "<p>Lista de logs.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "logs.id",
+            "description": "<p>Identificador do log.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "logs.operation",
+            "description": "<p>Texto descritivo da operação realizada.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "logs.type",
+            "description": "<p>Tipo de operação realizado.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "logs.user_name",
+            "description": "<p>Nome do usuário que realizou a ação.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.date",
+            "description": "<p>Data de registro do log.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"id\": 10,\n        \"operation\": \"Exclusão do produto Estojo\",\n        \"type\": \"delete\",\n        \"user_name\": \"Admin\",\n        \"date\": \"2016-12-18 16:15:21\"\n    },\n    {\n        \"id\": 9,\n        \"operation\": \"Autenticação na API\",\n        \"type\": \"select\",\n        \"user_name\": \"Admin\",\n        \"date\": \"2016-12-18 16:15:21\"\n    },\n    {\n        \"id\": 8,\n        \"operation\": \"Listagem de produtos\",\n        \"type\": \"select\",\n        \"user_name\": \"Admin\",\n        \"date\": \"2016-12-18 16:14:48\"\n    },\n    {\n        \"id\": 7,\n        \"operation\": \"Autenticação na API\",\n        \"type\": \"select\",\n        \"user_name\": \"Admin\",\n        \"date\": \"2016-12-18 16:14:48\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Logs.php",
+    "groupTitle": "Logs"
+  },
+  {
+    "name": "LogsTypes",
+    "group": "Logs",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/logs/types/",
+    "title": "Listagem de tipos de logs",
+    "description": "<p>Listagem dos tipos de logs que uma ação pode ter, sendo este usado como filtro na chamada acima.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "logs",
+            "description": "<p>Lista de tipos de logs.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    \"insert\",\n    \"select\",\n    \"update\",\n    \"delete\",\n    \"interact\"\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Logs.php",
+    "groupTitle": "Logs"
+  },
+  {
+    "name": "Ping",
+    "group": "Ping",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/ping/",
+    "title": "Teste de resposta da API",
+    "description": "<p>Método de requisição para teste de resposta da API.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Resposta da API com o timestamp da resposta.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"Pong in 1482088230\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Test.php",
+    "groupTitle": "Ping"
+  },
+  {
+    "name": "ProductsDelete",
+    "group": "Products",
+    "version": "0.1.0",
+    "type": "delete",
+    "url": "/products/:product_id",
+    "title": "Remoção de produto",
+    "description": "<p>Remove um produto do banco de dados.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Identificador do produto.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Mensagem de sucesso.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"Deleted\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Products.php",
+    "groupTitle": "Products"
+  },
+  {
+    "name": "ProductsGet",
+    "group": "Products",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/products/:product_id",
+    "title": "Exibição do produto",
+    "description": "<p>Exibição de um produto cadastrado no banco de dados.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Identificador do produto.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "products.id",
+            "description": "<p>Identificador do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.name",
+            "description": "<p>Nome do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.price",
+            "description": "<p>Preço do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "products.stock",
+            "description": "<p>Total de itens do produto no estoque.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.date_insert",
+            "description": "<p>Data de cadastro do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.date_update",
+            "description": "<p>Data da última atualização do produto.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"id\": 1,\n    \"name\": \"Caneta azul\",\n    \"price\": \"2.26\",\n    \"stock\": 79,\n    \"date_insert\": \"2016-12-17 18:40:57\",\n    \"date_update\": \"2016-12-18 17:27:39\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Products.php",
+    "groupTitle": "Products"
+  },
+  {
+    "name": "ProductsInsert",
+    "group": "Products",
+    "version": "0.1.0",
+    "type": "post",
+    "url": "/products/",
+    "title": "Inclusão de produto",
+    "description": "<p>Adiciona um produto ao banco de dados de acordo com os dados informados.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Nome do produto.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "price",
+            "description": "<p>Preço do produto.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "stock",
+            "description": "<p>Quantidade de itens do produto no estoque.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Mensagem de sucesso.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n{\n    \"message\": \"Created, id 5\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Products.php",
+    "groupTitle": "Products"
+  },
+  {
+    "name": "ProductsList",
+    "group": "Products",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/products/",
+    "title": "Listagem de produtos",
+    "description": "<p>Listagem de todos os produtos cadastrados no banco de dados.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "products",
+            "description": "<p>Lista de produtos.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "products.id",
+            "description": "<p>Identificador do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.name",
+            "description": "<p>Nome do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.price",
+            "description": "<p>Preço do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "products.stock",
+            "description": "<p>Total de itens do produto no estoque.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.date_insert",
+            "description": "<p>Data de cadastro do produto.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "products.date_update",
+            "description": "<p>Data da última atualização do produto.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"id\": 1,\n        \"name\": \"Caneta azul\",\n        \"price\": \"2.26\",\n        \"stock\": 79,\n        \"date_insert\": \"2016-12-17 18:40:57\",\n        \"date_update\": \"2016-12-18 17:27:39\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Lapizeira\",\n        \"price\": \"15.30\",\n        \"stock\": 6,\n        \"date_insert\": \"2016-12-17 18:41:00\",\n        \"date_update\": \"\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Lápis HB\",\n        \"price\": \"3.21\",\n        \"stock\": 0,\n        \"date_insert\": \"2016-12-17 18:41:01\",\n        \"date_update\": \"2016-12-18 17:28:19\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Borracha\",\n        \"price\": \"0.59\",\n        \"stock\": 122,\n        \"date_insert\": \"2016-12-17 18:48:24\",\n        \"date_update\": \"\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Products.php",
+    "groupTitle": "Products"
+  },
+  {
+    "name": "ProductsUpdate",
+    "group": "Products",
+    "version": "0.1.0",
+    "type": "patch",
+    "url": "/products/:product_id",
+    "title": "Alteração de produto",
+    "description": "<p>Altera um produto no banco de dados de acordo com os dados informados.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Identificador do produto.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Nome do produto.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "price",
+            "description": "<p>Preço do produto.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "stock",
+            "description": "<p>Quantidade de itens do produto no estoque.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Mensagem de sucesso.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"Updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Products.php",
+    "groupTitle": "Products"
+  },
+  {
+    "name": "UsersDelete",
+    "group": "Users",
+    "version": "0.1.0",
+    "type": "delete",
+    "url": "/users/:user_id",
+    "title": "Remoção de usuário",
+    "description": "<p>Remove um usuário do banco de dados. Somente usuários com privilégio de admin pode acessar este recurso.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Identificador do usuário.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Mensagem de sucesso.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"Deleted\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Users.php",
+    "groupTitle": "Users"
+  },
+  {
+    "name": "UsersGet",
+    "group": "Users",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/users/:user_id",
+    "title": "Exibição do usuário",
+    "description": "<p>Exibição de um usuário cadastrado no banco de dados. Somente usuários com privilégio de admin ou o próprio usuário pode acessar este recurso.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Identificador do usuário.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "users.id",
+            "description": "<p>Identificador do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.name",
+            "description": "<p>Nome do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.email",
+            "description": "<p>E-mail do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.password",
+            "description": "<p>Texto representativo de uma senha.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "users.admin",
+            "description": "<p>Delimitador do usuário como admin.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.date_insert",
+            "description": "<p>Data de cadastro do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.date_update",
+            "description": "<p>Data da última atualização do usuário.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"id\": 1,\n    \"name\": \"Admin\",\n    \"email\": \"admin@dev.local\",\n    \"password\": \"*****\",\n    \"admin\": true,\n    \"date_insert\": \"2016-12-18 11:50:47\",\n    \"date_update\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Users.php",
+    "groupTitle": "Users"
+  },
+  {
+    "name": "UsersInsert",
+    "group": "Users",
+    "version": "0.1.0",
+    "type": "post",
+    "url": "/products/",
+    "title": "Inclusão de usuário",
+    "description": "<p>Adiciona um usuário ao banco de dados de acordo com os dados informados. Somente usuários com privilégio de admin pode acessar este recurso.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identificador do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Nome do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>E-mail do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Senha do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "allowedValues": [
+              "\"true\"",
+              "\"true\""
+            ],
+            "optional": false,
+            "field": "admin",
+            "description": "<p>Delimitador do usuário como admin.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Mensagem de sucesso.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n{\n    \"message\": \"Created, id 4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Users.php",
+    "groupTitle": "Users"
+  },
+  {
+    "name": "UsersList",
+    "group": "Users",
+    "version": "0.1.0",
+    "type": "get",
+    "url": "/users/",
+    "title": "Listagem de usuários",
+    "description": "<p>Listagem de todos os usuários cadastrados no banco de dados. Somente usuários com privilégio de admin pode acessar este recurso.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "users",
+            "description": "<p>Lista de usuários.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "users.id",
+            "description": "<p>Identificador do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.name",
+            "description": "<p>Nome do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.email",
+            "description": "<p>E-mail do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.password",
+            "description": "<p>Texto representativo de uma senha.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "users.admin",
+            "description": "<p>Delimitador do usuário como admin.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.date_insert",
+            "description": "<p>Data de cadastro do usuário.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "users.date_update",
+            "description": "<p>Data da última atualização do usuário.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"id\": 1,\n        \"name\": \"Admin\",\n        \"email\": \"admin@dev.local\",\n        \"password\": \"*****\",\n        \"admin\": true,\n        \"date_insert\": \"2016-12-18 11:50:47\",\n        \"date_update\": \"\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"User 1\",\n        \"email\": \"user-1@dev.local\",\n        \"password\": \"*****\",\n        \"admin\": true,\n        \"date_insert\": \"2016-12-18 11:53:15\",\n        \"date_update\": \"2016-12-18 12:28:38\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"User 2\",\n        \"email\": \"other-2@dev.local\",\n        \"password\": \"*****\",\n        \"admin\": true,\n        \"date_insert\": \"2016-12-18 12:17:05\",\n        \"date_update\": \"2016-12-18 12:25:57\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Users.php",
+    "groupTitle": "Users"
+  },
+  {
+    "name": "UsersUpdate",
+    "group": "Users",
+    "version": "0.1.0",
+    "type": "patch",
+    "url": "/users/:user_id",
+    "title": "Alteração de usuário",
+    "description": "<p>Altera um usuário ao banco de dados de acordo com os dados informados. Somente usuários com privilégio de admin ou o próprio usuário pode acessar este recurso.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Auth-Token",
+            "description": "<p>Token para autenticação.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de autenticação:",
+          "content": "{\n    \"X-Auth-Token\": \"52f86f8c-ba2b-4089-bf14-a0a1e69581e2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Identificador do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Nome do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>E-mail do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>Senha do usuário.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "allowedValues": [
+              "\"true\"",
+              "\"true\""
+            ],
+            "optional": true,
+            "field": "admin",
+            "description": "<p>Delimitador do usuário como admin.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Mensagem de sucesso.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"message\": \"Updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "V1/Controller/Users.php",
+    "groupTitle": "Users"
+  }
+] });
