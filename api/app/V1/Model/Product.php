@@ -74,7 +74,7 @@ class Product
             ;
             $row = $query_builder->execute()->fetch();
             if (!$row) {
-                throw new Exception('Registry '.$id.' not found on database');
+                throw new \Exception('Registry '.$id.' not found on database');
             }
             $this->id = (int) $id;
             $this->name = (string) $row->name;
@@ -83,9 +83,9 @@ class Product
             $this->date_insert = (string) $row->date_insert;
             $this->date_update = (string) $row->date_update;
         } elseif (is_null($id)) {
-
+            // Objeto vazio
         } else {
-            throw new Exception(
+            throw new \Exception(
                 'Try to injection on class '.__CLASS__.' construct, '.
                     'variable $id received value '.$id.' from type '.gettype($id)
             );
@@ -106,10 +106,10 @@ class Product
             case 'name':
             case 'price':
             case 'stock':
-                $this->$attr = $value;
+                $this->$attr = trim($value);
                 break;
             default:
-                throw new Exception('Unknown attribute: '.$attr);
+                throw new \Exception('Unknown attribute: '.$attr);
                 break;
         }
     }
@@ -133,7 +133,7 @@ class Product
                 return $this->$attr;
                 break;
             default:
-                throw new Exception('Unknown attribute: '.$attr);
+                throw new \Exception('Unknown attribute: '.$attr);
                 break;
         }
     }
@@ -141,23 +141,26 @@ class Product
     /**
      * Adiciona um novo produto
      *
-     * @return int
+     * @return int|bool
      */
     public function insert()
     {
-        $query_builder = Doctrine::getInstance()->createQueryBuilder();
-        $query_builder
-            ->insert('products')
-            ->setValue('name', ':name')
-            ->setValue('price', ':price')
-            ->setValue('stock', ':stock')
-            ->setParameter(':name', $this->name, \PDO::PARAM_STR)
-            ->setParameter(':price', $this->price, \PDO::PARAM_STR)
-            ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
-            ->execute()
-        ;
-        $this->id = $query_builder->getConnection()->lastInsertId();
-        return $this->id;
+        if (!$this->id) {
+            $query_builder = Doctrine::getInstance()->createQueryBuilder();
+            $query_builder
+                ->insert('products')
+                ->setValue('name', ':name')
+                ->setValue('price', ':price')
+                ->setValue('stock', ':stock')
+                ->setParameter(':name', $this->name, \PDO::PARAM_STR)
+                ->setParameter(':price', $this->price, \PDO::PARAM_STR)
+                ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
+                ->execute()
+            ;
+            $this->id = (int) $query_builder->getConnection()->lastInsertId();
+            return $this->id;
+        }
+        return false;
     }
 
     /**
@@ -167,18 +170,21 @@ class Product
      */
     public function update()
     {
-        $query_builder = Doctrine::getInstance()->createQueryBuilder();
-        $query_builder
-            ->update('products')
-            ->set('name', ':name')
-            ->set('price', ':price')
-            ->set('stock', ':stock')
-            ->setParameter(':name', $this->name, \PDO::PARAM_STR)
-            ->setParameter(':price', $this->price, \PDO::PARAM_STR)
-            ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
-            ->execute()
-        ;
-        return true;
+        if ($this->id) {
+            $query_builder = Doctrine::getInstance()->createQueryBuilder();
+            $query_builder
+                ->update('products')
+                ->set('name', ':name')
+                ->set('price', ':price')
+                ->set('stock', ':stock')
+                ->setParameter(':name', $this->name, \PDO::PARAM_STR)
+                ->setParameter(':price', $this->price, \PDO::PARAM_STR)
+                ->setParameter(':stock', $this->stock, \PDO::PARAM_INT)
+                ->execute()
+            ;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -188,14 +194,34 @@ class Product
      */
     public function delete()
     {
-        $query_builder = Doctrine::getInstance()->createQueryBuilder();
-        $query_builder
-            ->delete('products')
-            ->where('id = :id')
-            ->setParameter(':id', $this->id, \PDO::PARAM_INT)
-            ->execute()
-        ;
-        return true;
+        if ($this->id) {
+            $query_builder = Doctrine::getInstance()->createQueryBuilder();
+            $query_builder
+                ->delete('products')
+                ->where('id = :id')
+                ->setParameter(':id', $this->id, \PDO::PARAM_INT)
+                ->execute()
+            ;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Retorna os dados do objeto como array
+     *
+     * @return array
+     */
+    public function asArray()
+    {
+        return [
+            'id' => (int) $this->id,
+            'name' => (string) $this->name,
+            'price' => number_format($this->price, 2, '.', ''),
+            'stock' => (int) $this->stock,
+            'date_insert' => (string) $this->date_insert,
+            'date_update' => (string) $this->date_update,
+        ];
     }
 
     /**
@@ -222,7 +248,20 @@ class Product
             ;
         }
 
-        return $query_builder->execute()->fetchAll();
+        $data = $query_builder->execute()->fetchAll();
+
+        $return = [];
+        foreach ($data as $row) {
+            $return[] = [
+                'id' => (int) $row->id,
+                'name' => (string) $row->name,
+                'price' => number_format($row->price, 2, '.', ''),
+                'stock' => (int) $row->stock,
+                'date_insert' => (string) $row->date_insert,
+                'date_update' => (string) $row->date_update,
+            ];
+        }
+        return $return;
     }
 
     /**

@@ -31,5 +31,46 @@ class Router
             '/'.self::URI_PREFIX.'/ping/',
             'AcmeCorp\Api\V1\Controller\Test::ping'
         );
+
+        self::injectProductActions($app);
+    }
+
+    /**
+     * Injeta as rotas relacionados aos produtos
+     *
+     * @param Silex\Application $app
+     * @return void
+     */
+    private static function injectProductActions(Application &$app)
+    {
+        $app->get(
+            '/'.self::URI_PREFIX.'/products/',
+            'AcmeCorp\Api\V1\Controller\Products::displayAll'
+        );
+        $app
+            ->get(
+                '/'.self::URI_PREFIX.'/products/{id}',
+                'AcmeCorp\Api\V1\Controller\Products::display'
+            )
+            ->assert('id', '\d+')
+        ;
+        $app->post(
+            '/'.self::URI_PREFIX.'/products/',
+            'AcmeCorp\Api\V1\Controller\Products::insert'
+        );
+        $app
+            ->patch(
+                '/'.self::URI_PREFIX.'/products/{id}',
+                'AcmeCorp\Api\V1\Controller\Products::update'
+            )
+            ->assert('id', '\d+')
+        ;
+        $app
+            ->delete(
+                '/'.self::URI_PREFIX.'/products/{id}',
+                'AcmeCorp\Api\V1\Controller\Products::delete'
+            )
+            ->assert('id', '\d+')
+        ;
     }
 }

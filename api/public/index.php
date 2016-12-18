@@ -21,5 +21,11 @@ $parts = [
 require_once(implode(DIRECTORY_SEPARATOR, $parts));
 
 $app = new Silex\Application();
+$app['debug'] = true;
 AcmeCorp\Api\V1\Router::inject($app);
+
+$app->error(function (\Exception $e, $request, $code) use ($app) {
+    $Error = new AcmeCorp\Api\V1\Error();
+    return $Error->response($app, $e, $request, $code);
+});
 $app->run();
