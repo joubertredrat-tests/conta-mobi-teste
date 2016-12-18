@@ -153,8 +153,7 @@ class Users extends ApiController
         }
 
         $user = new User($id);
-        if (
-            !$this->token->getUser()->admin &&
+        if (!$this->token->getUser()->admin &&
             $this->token->getUser()->id != $user->id
         ) {
             $data['code'] = self::RESPONSE_NOT_ALLOWED;
@@ -320,8 +319,7 @@ class Users extends ApiController
         }
 
         $user = new User($id);
-        if (
-            !$this->token->getUser()->admin &&
+        if (!$this->token->getUser()->admin &&
             $this->token->getUser()->id != $user->id
         ) {
             $data['code'] = self::RESPONSE_NOT_ALLOWED;
