@@ -28,4 +28,5 @@ $app->error(function (\Exception $e, $request, $code) use ($app) {
     $Error = new AcmeCorp\Api\V1\Error();
     return $Error->response($app, $e, $request, $code);
 });
+
 $app->run();

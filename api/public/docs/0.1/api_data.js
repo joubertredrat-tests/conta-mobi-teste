@@ -47,7 +47,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Users.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Users.php",
     "groupTitle": "Auth"
   },
   {
@@ -153,7 +153,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Logs.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Logs.php",
     "groupTitle": "Logs"
   },
   {
@@ -204,7 +204,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Logs.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Logs.php",
     "groupTitle": "Logs"
   },
   {
@@ -235,7 +235,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Test.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Test.php",
     "groupTitle": "Ping"
   },
   {
@@ -299,7 +299,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Products.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Products.php",
     "groupTitle": "Products"
   },
   {
@@ -398,7 +398,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Products.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Products.php",
     "groupTitle": "Products"
   },
   {
@@ -476,7 +476,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Products.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Products.php",
     "groupTitle": "Products"
   },
   {
@@ -569,7 +569,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Products.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Products.php",
     "groupTitle": "Products"
   },
   {
@@ -654,7 +654,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Products.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Products.php",
     "groupTitle": "Products"
   },
   {
@@ -718,7 +718,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Users.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Users.php",
     "groupTitle": "Users"
   },
   {
@@ -824,7 +824,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Users.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Users.php",
     "groupTitle": "Users"
   },
   {
@@ -920,7 +920,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Users.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Users.php",
     "groupTitle": "Users"
   },
   {
@@ -1020,7 +1020,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Users.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Users.php",
     "groupTitle": "Users"
   },
   {
@@ -1116,7 +1116,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "V1/Controller/Users.php",
+    "filename": "/home/dev/www/public_html/conta-mobi-teste/api/app/files/apidoc/Controller/Users.php",
     "groupTitle": "Users"
   }
 ] });

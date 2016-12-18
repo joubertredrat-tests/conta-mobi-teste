@@ -3,7 +3,8 @@
         "silex/silex": "~2.0",
         "doctrine/dbal": "^2.5",
         "symfony/yaml": "^3.2",
-        "ramsey/uuid": "^3.5"
+        "ramsey/uuid": "^3.5",
+        "kurl/silex-doctrine-migrations-provider": "^0.2.1"
     },
     "autoload": {
         "psr-4": {"AcmeCorp\\Api\\": "app/"}

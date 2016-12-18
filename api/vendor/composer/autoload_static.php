@@ -12,6 +12,11 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'Zend\\EventManager\\' => 18,
+            'Zend\\Code\\' => 10,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -21,6 +26,7 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Debug\\' => 24,
+            'Symfony\\Component\\Console\\' => 26,
             'Silex\\' => 6,
         ),
         'R' => 
@@ -30,9 +36,15 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'PackageVersions\\' => 16,
+        ),
+        'K' => 
+        array (
+            'Kurl\\Silex\\Provider\\' => 20,
         ),
         'D' => 
         array (
+            'Doctrine\\DBAL\\Migrations\\' => 25,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
@@ -44,6 +56,14 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
     );
 
     public static $prefixDirsPsr4 = array (
+        'Zend\\EventManager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-eventmanager/src',
+        ),
+        'Zend\\Code\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-code/src',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -72,6 +92,10 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
         array (
             0 => __DIR__ . '/..' . '/symfony/debug',
         ),
+        'Symfony\\Component\\Console\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/console',
+        ),
         'Silex\\' => 
         array (
             0 => __DIR__ . '/..' . '/silex/silex/src/Silex',
@@ -83,6 +107,18 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'PackageVersions\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ocramius/package-versions/src/PackageVersions',
+        ),
+        'Kurl\\Silex\\Provider\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kurl/silex-doctrine-migrations-provider/src',
+        ),
+        'Doctrine\\DBAL\\Migrations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/migrations/lib/Doctrine/DBAL/Migrations',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (
@@ -105,6 +141,10 @@ class ComposerStaticInit43a3016d0785af0becf86eec20ab9d9c
     public static $prefixesPsr0 = array (
         'P' => 
         array (
+            'ProxyManager\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src',
+            ),
             'Pimple' => 
             array (
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
