@@ -351,11 +351,51 @@ class User
     /**
      * Cria um hash de uma senha plana
      *
-     * @param string $plain_password
+     * @param string $password_plain
      * @return string
      */
-    public static function passwordHash($plain_password)
+    public static function passwordHash($password_plain)
     {
-        return password_hash($plain_password, PASSWORD_DEFAULT);
+        return password_hash($password_plain, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * Verifica se a senha plana corresponde a senha com hash
+     *
+     * @param string $password_plan
+     * @param string $password_hash
+     * @return bool
+     */
+    public function passwordVerify($password_plain, $password_hash)
+    {
+        return password_verify($password_plain, $password_hash);
+    }
+
+    /**
+     * Realiza a autenticação de um usuário
+     *
+     * @param string $email
+     * @param string $password
+     * @return self|bool
+     */
+    public static function auth($email, $password)
+    {
+        $query_builder = Doctrine::getInstance()->createQueryBuilder();
+        $query_builder
+            ->select('*')
+            ->from('users')
+            ->where('email = :email')
+            ->setParameter(':email', $email, \PDO::PARAM_STR)
+        ;
+        $row = $query_builder->execute()->fetch();
+        if (!$row) {
+            return false;
+        }
+
+        if (self::passwordVerify($password, $row->password)) {
+            return new self($row->id);
+        } else {
+            return false;
+        }
     }
 }

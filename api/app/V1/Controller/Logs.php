@@ -28,6 +28,14 @@ class Logs extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+
         $type = $this->request->get('type');
         $user_id = filter_var(
             $this->request->get('user_id'),
@@ -41,6 +49,8 @@ class Logs extends ApiController
         }
 
         $data = Log::rowsGet($type, $user, ['id', 'DESC']);
+        Log::registerSelect($this->token->getUser(), 'Listagem de logs');
+
         return $this->response($data);
     }
 
@@ -56,7 +66,17 @@ class Logs extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+
         $data = Log::getTypes();
+        Log::registerSelect($this->token->getUser(), 'Listagem de tipos de log');
+
         return $this->response($data);
     }
 }

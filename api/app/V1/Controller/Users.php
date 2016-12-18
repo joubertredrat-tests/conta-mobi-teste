@@ -12,6 +12,8 @@ namespace AcmeCorp\Api\V1\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Silex\Application;
 use AcmeCorp\Api\V1\Model\User;
+use AcmeCorp\Api\V1\Model\Token;
+use AcmeCorp\Api\V1\Model\Log;
 
 class Users extends ApiController
 {
@@ -27,7 +29,22 @@ class Users extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+        if (!$this->token->getUser()->admin) {
+            $data['code'] = self::RESPONSE_NOT_ALLOWED;
+            $data['message'] = 'Only admin users can see this data';
+            return $this->response($data, $data['code']);
+        }
+
         $data = User::rowsGet();
+
+        Log::registerSelect($this->token->getUser(), 'Listagem de usuários');
 
         return $this->response($data);
     }
@@ -62,6 +79,19 @@ class Users extends ApiController
     {
         $this->setApplication($app);
         $this->setRequest($request);
+
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+        if (!$this->token->getUser()->admin) {
+            $data['code'] = self::RESPONSE_NOT_ALLOWED;
+            $data['message'] = 'Only admin users can insert new users';
+            return $this->response($data, $data['code']);
+        }
 
         $name = $this->request->get('name');
         $email = filter_var(
@@ -119,6 +149,19 @@ class Users extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+        if (!$this->token->getUser()->admin) {
+            $data['code'] = self::RESPONSE_NOT_ALLOWED;
+            $data['message'] = 'Only admin users can update users';
+            return $this->response($data, $data['code']);
+        }
+
         $name = $this->request->get('name');
         $email = filter_var(
             $this->request->get('email'),
@@ -173,10 +216,66 @@ class Users extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+        if (!$this->token->getUser()->admin) {
+            $data['code'] = self::RESPONSE_NOT_ALLOWED;
+            $data['message'] = 'Only admin users can delete users';
+            return $this->response($data, $data['code']);
+        }
+
         $user = new User($id);
         $user->delete();
 
         $data['message'] = 'Deleted';
+        return $this->response($data);
+    }
+
+    /**
+     * Autentica um usuário
+     *
+     * @param Silex\Application $app
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @return Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function login(Application $app, Request $request)
+    {
+        $this->setApplication($app);
+        $this->setRequest($request);
+
+        $email = filter_var(
+            $this->request->get('email'),
+            FILTER_VALIDATE_EMAIL
+        );
+        $password = $this->request->get('password');
+        $err = [];
+        if (is_bool($email) && !$email) {
+            $err[] = 'email';
+        }
+        if (is_bool($password) && !$password) {
+            $err[] = 'password';
+        }
+        if ($err) {
+            $return['code'] = self::RESPONSE_NOT_ACEPTED;
+            $return['message'] = 'Invalid fields: '.implode(', ', $err);
+            return $this->response($return, $return['code']);
+        }
+
+        $user = User::auth($email, $password);
+        if (!$user) {
+            $return['code'] = self::RESPONSE_AUTH_ERROR;
+            $return['message'] = 'Login fail';
+            return $this->response($return, $return['code']);
+        }
+
+        $key = Token::registerNew($user);
+        $data[] = $key;
+
         return $this->response($data);
     }
 }

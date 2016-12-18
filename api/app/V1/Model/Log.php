@@ -44,9 +44,9 @@ class Log
             ->setValue('operation', ':operation')
             ->setValue('type', ':type')
             ->setValue('users_id', ':users_id')
-            ->setParameter(':name', $operation, \PDO::PARAM_STR)
-            ->setParameter(':email', $type, \PDO::PARAM_STR)
-            ->setParameter(':password', $user->id, \PDO::PARAM_STR)
+            ->setParameter(':operation', $operation, \PDO::PARAM_STR)
+            ->setParameter(':type', $type, \PDO::PARAM_STR)
+            ->setParameter(':users_id', $user->id, \PDO::PARAM_INT)
             ->execute()
         ;
 

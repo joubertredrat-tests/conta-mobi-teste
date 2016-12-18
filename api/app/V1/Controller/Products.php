@@ -12,6 +12,7 @@ namespace AcmeCorp\Api\V1\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Silex\Application;
 use AcmeCorp\Api\V1\Model\Product;
+use AcmeCorp\Api\V1\Model\Log;
 
 class Products extends ApiController
 {
@@ -27,7 +28,16 @@ class Products extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+
         $data = Product::rowsGet();
+        Log::registerSelect($this->token->getUser(), 'Listagem de produtos');
 
         return $this->response($data);
     }
@@ -45,8 +55,17 @@ class Products extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+
         $product = new Product($id);
         $data = $product->asArray();
+        Log::registerSelect($this->token->getUser(), 'Exibição do produto '.$product->name);
 
         return $this->response($data);
     }
@@ -62,6 +81,14 @@ class Products extends ApiController
     {
         $this->setApplication($app);
         $this->setRequest($request);
+
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
 
         $name = $this->request->get('name');
         $price = filter_var(
@@ -96,6 +123,8 @@ class Products extends ApiController
         $product->stock = $stock;
         $id = $product->insert();
 
+        Log::registerInsert($this->token->getUser(), 'Cadastro do produto '.$product->name);
+
         $data['code'] = self::RESPONSE_SUCCESS_INSERT;
         $data['message'] = 'Created, id '.$id;
         return $this->response($data);
@@ -113,6 +142,14 @@ class Products extends ApiController
     {
         $this->setApplication($app);
         $this->setRequest($request);
+
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
 
         $name = $this->request->get('name');
         $price = filter_var(
@@ -138,6 +175,8 @@ class Products extends ApiController
         }
         $product->update();
 
+        Log::registerUpdate($this->token->getUser(), 'Alteração do produto '.$product->name);
+
         $data['message'] = 'Updated';
         return $this->response($data);
     }
@@ -155,8 +194,18 @@ class Products extends ApiController
         $this->setApplication($app);
         $this->setRequest($request);
 
+        $auth = $this->auth();
+        switch ($auth['code']) {
+            case self::RESPONSE_AUTH_ERROR:
+            case self::RESPONSE_AUTH_EXPIRED:
+                return $this->response($auth, $auth['code']);
+                break;
+        }
+
         $product = new Product($id);
         $product->delete();
+
+        Log::registerUpdate($this->token->getUser(), 'Exclusão do produto '.$product->name);
 
         $data['message'] = 'Deleted';
         return $this->response($data);

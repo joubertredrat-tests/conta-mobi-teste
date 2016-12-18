@@ -32,9 +32,24 @@ class Router
             'AcmeCorp\Api\V1\Controller\Test::ping'
         );
 
+        self::injectAuthActions($app);
         self::injectProductActions($app);
         self::injectUserActions($app);
         self::injectLogsActions($app);
+    }
+
+    /**
+     * Injeta as rotas relacionados a autenticação
+     *
+     * @param Silex\Application $app
+     * @return void
+     */
+    private static function injectAuthActions(Application &$app)
+    {
+        $app->post(
+            '/'.self::URI_PREFIX.'/auth/',
+            'AcmeCorp\Api\V1\Controller\Users::login'
+        );
     }
 
     /**
