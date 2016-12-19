@@ -35,7 +35,17 @@ A segunda forma consiste em apontar o document root do webserver para a pasta `p
 
 Como a aplicação é REST, não existe formulários, nem views, somente o endpoint e as chamadas que podem ser realizadas usando um cliente HTTP. Porém, para utilização correta das chamadas disponíveis, basta consultar a documentação da API em http://0.0.0.0:8000/v1/docs/latest/ ou em http://dominio-escolhido/v1/docs/latest/
 
+#### Relatórios
+
+Internamente a API tem um recurso que permite enviar relatórios do estado do estoque para todos os usuários cadastrados na API. Para gerar um novo relatório, basta executar o comando `php bin/console app:products-report`. Uma vez executado este comando, será gerado um relatório e enviado a todos os usuários no sistema.
+
+Para agendar o envio de relatórios periodicamente, basta adicionar o comando ao cron, como no exemplo abaixo.
+
+```
+30 2 * * * /usr/bin/php /pasta/da/sua/api/bin/console app:products-report >> /dev/null
+```
+Para ajustar ao horário desejado, basta trocar o primeiro número pelo minuto do tempo desejado e o segundo para a hora do tempo desejado, além de pasta correta aonde está instalado a aplicação.
+
 #### Bugs e informações
 
-Para reportar bugs ou solicitar mais informações, basta abrir uma issue neste repositório
-
+Para reportar bugs ou solicitar mais informações, basta abrir uma issue neste repositório.
