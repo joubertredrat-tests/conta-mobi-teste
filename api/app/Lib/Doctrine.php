@@ -90,7 +90,9 @@ class Doctrine
     {
         $data = Yaml::parse(file_get_contents(CONFIG_PATH.'config.yml'));
         $config = new Configuration();
-        if ($data['database']['debug'] == 'true') {
+        if (isset($data['database']['debug']) &&
+            $data['database']['debug'] == 'true'
+        ) {
             $config->setSQLLogger(new EchoSQLLogger());
         }
 
@@ -100,7 +102,7 @@ class Doctrine
             'user' => $data['database']['user'],
             'password' => $data['database']['password'],
             'dbname' => $data['database']['name'],
-            'persistent' => $data['database']['persistent'] == 'true',
+            'persistent' => false,
             'charset' => 'utf8',
             'driver' => 'pdo_mysql',
         ];

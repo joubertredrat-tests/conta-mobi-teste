@@ -249,4 +249,74 @@ class InstallSchema
             $connection->query($query);
         }
     }
+
+    /**
+     * Inclusao de schema alternativo ao schema do doctrine,
+     * possivelmente apresentando bugs.
+     *
+     * @return void
+     */
+    public static function runAlternative()
+    {
+        $connection = Doctrine::getInstance();
+
+        $connection->query(
+            "CREATE TABLE IF NOT EXISTS `products` (
+              `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador do produto',
+              `name` VARCHAR(200) NOT NULL COMMENT 'Nome do produto',
+              `price` DECIMAL(10,2) NOT NULL COMMENT 'Valor do produto',
+              `stock` INT NOT NULL,
+              `date_insert` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de inclusão do registro',
+              `date_update` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Estoque do produto',
+              PRIMARY KEY (`id`))
+            ENGINE = InnoDB
+            COMMENT = 'Lista de produtos';"
+        );
+        $connection->query(
+            "CREATE TABLE IF NOT EXISTS `users` (
+              `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador do usuário',
+              `name` VARCHAR(150) NOT NULL COMMENT 'Nome do usuário',
+              `email` VARCHAR(150) NOT NULL COMMENT 'E-mail do usuário',
+              `password` VARCHAR(200) NOT NULL COMMENT 'Senha do usuário',
+              `admin` TINYINT(1) NOT NULL,
+              `date_insert` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de inclusão do registro',
+              `date_update` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+                COMMENT 'Data de alteração do registro',
+              PRIMARY KEY (`id`))
+            ENGINE = InnoDB
+            COMMENT = 'Listagem de usuários';"
+        );
+        $connection->query(
+            "CREATE TABLE IF NOT EXISTS `logs` (
+              `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador do log',
+              `operation` TEXT NOT NULL,
+              `type` VARCHAR(45) NOT NULL,
+              `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data da operação',
+              `users_id` INT NOT NULL COMMENT 'Identificador do usuário',
+              PRIMARY KEY (`id`),
+              INDEX `fk_logs_users_idx` (`users_id` ASC),
+              CONSTRAINT `fk_logs_users`
+                FOREIGN KEY (`users_id`)
+                REFERENCES `users` (`id`)
+                ON DELETE NO ACTION
+                ON UPDATE NO ACTION)
+            ENGINE = InnoDB;"
+        );
+        $connection->query(
+            "CREATE TABLE IF NOT EXISTS `tokens` (
+              `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Identificador do token',
+              `token_key` VARCHAR(300) NOT NULL COMMENT 'Chave do token',
+              `expires` DATETIME NOT NULL COMMENT 'Data de expiração do token',
+              `date_insert` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de inclusão do registro',
+              `users_id` INT NOT NULL COMMENT 'Identificador do usuário',
+              PRIMARY KEY (`id`),
+              INDEX `fk_tokens_users1_idx` (`users_id` ASC),
+              CONSTRAINT `fk_tokens_users1`
+                FOREIGN KEY (`users_id`)
+                REFERENCES `users` (`id`)
+                ON DELETE NO ACTION
+                ON UPDATE NO ACTION)
+            ENGINE = InnoDB;"
+        );
+    }
 }

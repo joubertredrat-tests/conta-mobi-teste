@@ -45,6 +45,11 @@ class Config extends Command
             ''
         ]);
 
+        if (file_exists(CONFIG_PATH.'config.yml')) {
+            $output->writeln('Application already configured');
+            return false;
+        }
+
         $helper = $this->getHelper('question');
 
         $question = new Question('Database host (default localhost): ', 'localhost');
