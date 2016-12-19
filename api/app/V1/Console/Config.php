@@ -106,6 +106,9 @@ class Config extends Command
             'password' => $database_password,
             'name' => $database_name
         ];
+        $data['api'] = [
+            'debug' => true
+        ];
         $yaml = Yaml::dump($data);
         file_put_contents(CONFIG_PATH.'config.yml', $yaml);
 
