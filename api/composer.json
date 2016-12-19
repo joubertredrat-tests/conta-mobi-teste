@@ -4,7 +4,8 @@
         "doctrine/dbal": "^2.5",
         "symfony/yaml": "^3.2",
         "ramsey/uuid": "^3.5",
-        "kurl/silex-doctrine-migrations-provider": "^0.2.1"
+        "kurl/silex-doctrine-migrations-provider": "^0.2.1",
+        "phpmailer/phpmailer": "^5.2"
     },
     "autoload": {
         "psr-4": {"AcmeCorp\\Api\\": "app/"}

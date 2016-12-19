@@ -23,6 +23,7 @@ final class Versions
   'ocramius/package-versions' => '1.1.1@4b2bfc8128db95b533303942b0d5b332bffa07c6',
   'ocramius/proxy-manager' => '2.0.4@a55d08229f4f614bf335759ed0cf63378feeb2e6',
   'paragonie/random_compat' => 'v2.0.4@a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e',
+  'phpmailer/phpmailer' => 'v5.2.17@208913c6042967ba404f4bfa0819bf5bef79dbec',
   'pimple/pimple' => 'v3.0.2@a30f7d6e57565a2e1a316e1baf2a483f788b258a',
   'psr/log' => '1.0.2@4ebe3a8bf773a19edfe0a84b6585ba3d401b724d',
   'ramsey/uuid' => '3.5.2@5677cfe02397dd6b58c861870dfaa5d9007d3954',
@@ -37,7 +38,7 @@ final class Versions
   'symfony/yaml' => 'v3.2.1@a7095af4b97a0955f85c8989106c249fa649011f',
   'zendframework/zend-code' => '3.1.0@2899c17f83a7207f2d7f53ec2f421204d3beea27',
   'zendframework/zend-eventmanager' => '3.0.1@5c80bdee0e952be112dcec0968bad770082c3a6e',
-  '__root__' => '9999999-dev@446a904df4632a6e629690233852bca830db4256',
+  '__root__' => '9999999-dev@303651fa739d5a4e8723a94b609a8a8cb3000e7c',
 );
 
     private function __construct()

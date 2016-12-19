@@ -5,8 +5,9 @@ Bem vindos a API da Acme Corp. Esta API tem o objetivo de facilitar a manutenç�
 #### Instalação
 
 Para instalação desta API, é necessário os seguintes pré-requisitos.
+
 * PHP >= 7.0
-* Mysql >= 5.6 ou MariaDB >= 10.0
+* MySQL >= 5.6 ou MariaDB >= 10.0
 * Apache, Nginx, Lighttpd ou qualquer outro webserver com suporte a PHP.
 
 Para fazer a instalação, é necessário seguir os passos abaixo.

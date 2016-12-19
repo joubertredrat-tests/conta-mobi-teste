@@ -6,3 +6,12 @@ database:
     name: on-amawing-database
     debug: false
     persistent: false
+api:
+    debug: true
+smtp:
+    host:
+    port:
+    secure:
+    username:
+    password:
+    from:
