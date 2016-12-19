@@ -90,7 +90,7 @@ class Config extends Command
 
         $confirm = $helper->ask($input, $output, $question);
         if ($confirm == 'no') {
-            $output->writeln('Try run command again');
+            return false;
         } else {
             if (!Doctrine::testConnection(
                 $database_host,
@@ -114,6 +114,72 @@ class Config extends Command
         $data['api'] = [
             'debug' => true
         ];
+
+
+        $question = new Question('SMTP host: ');
+        do {
+            $smtp_host = $helper->ask($input, $output, $question);
+        } while (is_null($smtp_host));
+        $question = new Question('SMTP port: ');
+        do {
+            $smtp_port = $helper->ask($input, $output, $question);
+        } while (is_null($smtp_port));
+        $question = new ChoiceQuestion(
+            'SMTP secure mode',
+            ['TLS', 'SSL', 'STARTTLS'],
+            1
+        );
+        $question->setErrorMessage('This option %s is invalid.');
+        $smtp_secure = $helper->ask($input, $output, $question);
+        $question = new Question('SMTP username e-mail: ');
+        do {
+            $smtp_username = $helper->ask($input, $output, $question);
+        } while (is_null($smtp_username) ||
+            !filter_var(
+                $smtp_username,
+                FILTER_VALIDATE_EMAIL
+            )
+        );
+        $question = new Question('SMTP password: ');
+        do {
+            $smtp_password = $helper->ask($input, $output, $question);
+        } while (is_null($smtp_password));
+        $question = new Question('From e-mail (default '.$smtp_username.'): ', $smtp_username);
+        do {
+            $smtp_from = $helper->ask($input, $output, $question);
+        } while (is_null($smtp_from));
+
+
+        $smtp_confirm = [
+            'Host: '.$smtp_host,
+            'Port: '.$smtp_port,
+            'Secure: '.$smtp_secure,
+            'Username: '.$smtp_username,
+            'Password: '.$smtp_password,
+            'From e-mail: '.$smtp_from,
+        ];
+
+        $question = new ChoiceQuestion(
+            "Are you sure that this information is correct?\n\n".implode("\n", $smtp_confirm),
+            ['no', 'yes'],
+            1
+        );
+        $question->setErrorMessage('This option %s is invalid.');
+
+        $confirm = $helper->ask($input, $output, $question);
+        if ($confirm == 'no') {
+            return false;
+        }
+
+        $data['smtp'] = [
+            'host' => $smtp_host,
+            'port' => $smtp_port,
+            'secure' => $smtp_secure,
+            'username' => $smtp_username,
+            'password' => $smtp_password,
+            'from' => $smtp_from
+        ];
+
         $yaml = Yaml::dump($data);
         file_put_contents(CONFIG_PATH.'config.yml', $yaml);
 
