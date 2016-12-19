@@ -15,6 +15,7 @@ use AcmeCorp\Api\V1\Console\Install;
 use AcmeCorp\Api\V1\Console\BuildDoc;
 use AcmeCorp\Api\V1\Console\CheckPsr2;
 use AcmeCorp\Api\V1\Console\Run;
+use AcmeCorp\Api\V1\Console\Reports;
 
 $app = new Application();
 
@@ -23,5 +24,6 @@ $app->add(new Install());
 $app->add(new BuildDoc());
 $app->add(new CheckPsr2());
 $app->add(new Run());
+$app->add(new Reports());
 
 $app->run();
