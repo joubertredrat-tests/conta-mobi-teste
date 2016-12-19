@@ -101,13 +101,41 @@ class Doctrine
             'password' => $data['database']['password'],
             'dbname' => $data['database']['name'],
             'persistent' => $data['database']['persistent'] == 'true',
-            'host' => $data['database']['host'],
             'charset' => 'utf8',
             'driver' => 'pdo_mysql',
         ];
         $connection = DriverManager::getConnection($params, $config);
         $connection->setFetchMode(\PDO::FETCH_OBJ);
         return $connection;
+    }
+
+    /**
+     * Realiza o teste de conexão
+     * @param string $host
+     * @param string $port
+     * @param string $user
+     * @param string $password
+     * @param string $name
+     * @return boolean
+     */
+    public static function testConnection($host, $port, $user, $password, $name)
+    {
+        try {
+            $params = [
+                'host' => $host,
+                'port' => $port,
+                'user' => $user,
+                'password' => $password,
+                'dbname' => $name,
+                'persistent' => false,
+                'charset' => 'utf8',
+                'driver' => 'pdo_mysql',
+            ];
+            $connection = DriverManager::getConnection($params, new Configuration());
+            return $connection->ping();
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

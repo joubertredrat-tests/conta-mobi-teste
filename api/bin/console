@@ -10,12 +10,14 @@ $parts = [
 require_once(implode(DIRECTORY_SEPARATOR, $parts));
 
 use Symfony\Component\Console\Application;
+use AcmeCorp\Api\V1\Console\Config;
 use AcmeCorp\Api\V1\Console\Install;
 use AcmeCorp\Api\V1\Console\BuildDoc;
 use AcmeCorp\Api\V1\Console\CheckPsr2;
 
 $app = new Application();
 
+$app->add(new Config());
 $app->add(new Install());
 $app->add(new BuildDoc());
 $app->add(new CheckPsr2());
