@@ -43,6 +43,6 @@ class Run extends Command
             'Listening on http://0.0.0.0:8000 ...'
         ]);
 
-        shell_exec('php -S 0.0.0.0:8000 '.PUBLIC_PATH.'index.php');
+        shell_exec('php -S 0.0.0.0:8000 -t '.PUBLIC_PATH.' '.PUBLIC_PATH.'index.php');
     }
 }

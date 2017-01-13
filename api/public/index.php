@@ -12,21 +12,27 @@
  * @see http://www.php-fig.org/psr/psr-2/
  */
 
-$parts = [
-    __DIR__,
-    '..',
-    'app',
-    'bootstrap.php'
-];
-require_once(implode(DIRECTORY_SEPARATOR, $parts));
+$filename = __DIR__.preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
+if (php_sapi_name() === 'cli-server' && is_file($filename)) {
+    return false;
+} else {
 
-$app = new Silex\Application();
-$app['debug'] = true;
-AcmeCorp\Api\V1\Router::inject($app);
+  $parts = [
+      __DIR__,
+      '..',
+      'app',
+      'bootstrap.php'
+  ];
+  require_once(implode(DIRECTORY_SEPARATOR, $parts));
 
-$app->error(function (\Exception $e, $request, $code) use ($app) {
-    $Error = new AcmeCorp\Api\V1\Error();
-    return $Error->response($app, $e, $request, $code);
-});
+  $app = new Silex\Application();
+  $app['debug'] = true;
+  AcmeCorp\Api\V1\Router::inject($app);
 
-$app->run();
+  $app->error(function (\Exception $e, $request, $code) use ($app) {
+      $Error = new AcmeCorp\Api\V1\Error();
+      return $Error->response($app, $e, $request, $code);
+  });
+
+  $app->run();
+}
